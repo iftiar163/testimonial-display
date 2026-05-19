@@ -1,0 +1,25 @@
+.tcpt-testimonials .testimonial-item {
+    border: 1px solid #ddd;
+    padding: 25px;
+    margin-bottom: 30px;
+    border-radius: 8px;
+    background: #fff;
+}
+
+.tcpt-testimonials .testimonial-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    float: left;
+    margin-right: 20px;
+}
+
+.tcpt-testimonials .testimonial-content {
+    overflow: hidden;
+}
+
+.testimonial-item img {
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+}

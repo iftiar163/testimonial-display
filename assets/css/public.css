@@ -1,25 +1,102 @@
-.tcpt-testimonials .testimonial-item {
-    border: 1px solid #ddd;
-    padding: 25px;
-    margin-bottom: 30px;
-    border-radius: 8px;
-    background: #fff;
+.tcpt-testimonials {
+    display: grid;
+    gap: 30px;
+    margin: 40px 0;
+    padding: 0;
 }
 
-.tcpt-testimonials .testimonial-avatar {
-    width: 80px;
-    height: 80px;
+.tcpt-col-3 { grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
+.tcpt-col-2 { grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); }
+.tcpt-col-1 { grid-template-columns: 1fr; }
+
+/* Single Testimonial Card */
+.tcpt-testimonial-card {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 35px 30px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    border: 1px solid #f0f0f0;
+    position: relative;
+}
+
+.tcpt-testimonial-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+}
+
+.tcpt-quote-icon {
+    font-size: 60px;
+    line-height: 1;
+    color: #e0f2fe;
+    position: absolute;
+    top: 20px;
+    left: 25px;
+    font-family: Georgia, serif;
+    opacity: 0.6;
+}
+
+/* Content */
+.tcpt-content {
+    font-size: 1.05rem;
+    line-height: 1.65;
+    color: #374151;
+    margin-bottom: 25px;
+    position: relative;
+    z-index: 2;
+}
+
+/* Rating Stars - FIXED */
+.tcpt-rating {
+    margin: 15px 0 20px;
+    font-size: 1.5rem;
+    letter-spacing: 3px;
+}
+
+.tcpt-rating .star {
+    color: #e5e7eb;           /* Empty star color */
+    transition: color 0.2s;
+}
+
+.tcpt-rating .star.filled {
+    color: #fbbf24;           /* Filled star color (Golden) */
+}
+
+/* Author */
+.tcpt-author {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #f3f4f6;
+}
+
+.tcpt-avatar img {
+    width: 55px;
+    height: 55px;
     border-radius: 50%;
-    float: left;
-    margin-right: 20px;
+    object-fit: cover;
+    border: 3px solid #f0f9ff;
 }
 
-.tcpt-testimonials .testimonial-content {
-    overflow: hidden;
+.tcpt-author-info strong {
+    display: block;
+    color: #1f2937;
+    font-size: 1.05rem;
 }
 
-.testimonial-item img {
-  width: 200px;
-  height: 200px;
-  object-fit: cover;
+.tcpt-company {
+    color: #6b7280;
+    font-size: 0.95rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .tcpt-testimonials {
+        gap: 25px;
+    }
+    .tcpt-testimonial-card {
+        padding: 28px 24px;
+    }
 }

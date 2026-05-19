@@ -151,58 +151,81 @@ class Testimonials_CPT
         }
     }
 
-    /**
-     * Shortcode: [testimonials limit="6" category="slug"]
+       /**
+     * Shortcode: [testimonials limit="6" category="slug" columns="3"]
      */
-    public function testimonials_shortcode($atts) {
-        $atts = shortcode_atts([
-            'limit'     => 6,
-            'category'  => ''
-        ], $atts);
+    public function testimonials_shortcode( $atts ) {
+        $atts = shortcode_atts( array(
+            'limit'    => 6,
+            'category' => '',
+            'columns'  => 3,
+        ), $atts );
 
-        $args = [
-            'post_type'         => 'testimonial',
-            'posts_per_page'    => absint($atts['limit']),
-            'orderby'           => 'date',
-            'order'             => 'DESC'
-        ];
+        $args = array(
+            'post_type'      => 'testimonial',
+            'posts_per_page' => absint( $atts['limit'] ),
+            'orderby'        => 'date',
+            'order'          => 'DESC',
+        );
 
-        if(!empty($atts['category'])) {
-            $args['tax_query'] = [
-                [
+        if ( ! empty( $atts['category'] ) ) {
+            $args['tax_query'] = array(
+                array(
                     'taxonomy' => 'testimonial_category',
                     'field'    => 'slug',
                     'terms'    => $atts['category'],
-                ]
-            ];
+                )
+            );
         }
 
-        $query = new WP_Query($args);
+        $query = new WP_Query( $args );
+        if ( ! $query->have_posts() ) {
+            return '<p>No testimonials found.</p>';
+        }
+
+        $columns = absint( $atts['columns'] );
+        $col_class = $columns === 1 ? 'tcpt-col-1' : ( $columns === 2 ? 'tcpt-col-2' : 'tcpt-col-3' );
+
         ob_start();
         ?>
-        <div class="tcpt-testimonial">
-            <?php if( $query->have_posts() ) while($query->have_posts()) : $query->the_post(); ?>
-                <div class="testimonial-item">
-                    <?php the_post_thumbnail('medimu', ['class' => 'testimonial-avatar']); ?>
-                    <div class="testimonial-content">
+        <div class="tcpt-testimonials <?php echo esc_attr( $col_class ); ?>">
+            <?php while ( $query->have_posts() ) : $query->the_post(); 
+                $client_name = get_post_meta( get_the_ID(), '_client_name', true );
+                $company     = get_post_meta( get_the_ID(), '_company', true );
+                $rating      = get_post_meta( get_the_ID(), '_rating', true );
+            ?>
+                <div class="tcpt-testimonial-card">
+                    <div class="tcpt-quote-icon">“</div>
+                    
+                    <div class="tcpt-content">
                         <?php the_content(); ?>
-                        <p class="client-info">
-                            <strong><?php echo esc_html( get_post_meta( get_the_ID(), '_client_name', true ) ); ?></strong>
-                            <?php if ( $company = get_post_meta( get_the_ID(), '_company', true ) ) : ?>
-                                , <?php echo esc_html( $company ); ?>
-                            <?php endif; ?>
-                        </p>
-                        <?php if ( $rating = get_post_meta( get_the_ID(), '_rating', true ) ) : ?>
-                            <p class="testimonial-rating">
-                                <strong><?php esc_html_e('Rating:', 'testimonials-cpt'); ?></strong>
-                                <?php echo esc_html( $rating ); ?>/5
-                            </p>
+                    </div>
+
+                    <?php if ( $rating ) : ?>
+                        <div class="tcpt-rating">
+                            <?php for( $i = 1; $i <= 5; $i++ ) : ?>
+                                <span class="<?php echo $i <= $rating ? 'star filled' : 'star'; ?>">★</span>
+                            <?php endfor; ?>
+                        </div>
+                    <?php endif; ?>
+
+                    <div class="tcpt-author">
+                        <?php if ( has_post_thumbnail() ) : ?>
+                            <div class="tcpt-avatar">
+                                <?php the_post_thumbnail( 'thumbnail', array( 'class' => 'avatar-img' ) ); ?>
+                            </div>
                         <?php endif; ?>
+                        
+                        <div class="tcpt-author-info">
+                            <strong><?php echo esc_html( $client_name ); ?></strong>
+                            <?php if ( $company ) : ?>
+                                <span class="tcpt-company"><?php echo esc_html( $company ); ?></span>
+                            <?php endif; ?>
+                        </div>
                     </div>
                 </div>
             <?php endwhile; wp_reset_postdata(); ?>
         </div>
-
         <?php
         return ob_get_clean();
     }
